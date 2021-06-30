@@ -1,28 +1,38 @@
 import React from 'react';
 import './App.css';
-import {TaskType, Todolist} from "./Todolist";
+import {Todolist} from "./Todolist";
 
-function App() {
+export type TaskType = {
+  id: number
+  title: string
+  isDone: boolean
+}
 
-  let tasks1: Array<TaskType> = [
+const App = () => {
+  const tasks: Array<TaskType> = [
     {id: 1, title: 'CSS', isDone: true},
     {id: 2, title: 'JS', isDone: false},
-    {id: 3, title: 'React', isDone: true}
+    {id: 3, title: 'React', isDone: true},
+    {id: 4, title: 'Hi', isDone: true},
+    {id: 5, title: 'How are you', isDone: true},
+    {id: 6, title: 'Yo', isDone: false}
   ]
 
-  let tasks2: Array<TaskType> = [
-    {id: 1, title: 'Hi', isDone: true},
-    {id: 2, title: 'How are you', isDone: true},
-    {id: 3, title: 'Yo', isDone: false}
-  ]
+  const removeTask = (taskId: number) => {
+
+  }
 
   return (
-    <div>
-      <Todolist title={'What to learn'} tasks={tasks1}/>
-      <Todolist title={'Songs'} tasks={tasks2}/>
+    <div className={'App'}>
+      <Todolist
+        title={'What to learn'}
+        tasks={tasks}
+        removeTask={removeTask}
+        />
     </div>
   );
 }
 
 export default App;
-// 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
+
+//https://youtu.be/F5NwMUukIhg?list=PLbLBXDhswD1en22z_qAh25RvkVXCmZ_IH&t=2520
