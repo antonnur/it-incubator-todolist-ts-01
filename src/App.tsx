@@ -33,10 +33,10 @@ const App = () => {
 
   let tasksForRender = tasks
   if (filter === 'active') {
-    tasksForRender = tasks.filter(t => t.isDone === false) //!t.isDone
+    tasksForRender = tasks.filter(t => !t.isDone) //t.isDone === false
   }
   if (filter === 'completed') {
-    tasksForRender = tasks.filter(t => t.isDone === true) //t.isDone
+    tasksForRender = tasks.filter(t => t.isDone) //t.isDone === true
   }
 
   return (
@@ -52,5 +52,3 @@ const App = () => {
 }
 
 export default App;
-
-//https://youtu.be/F5NwMUukIhg?list=PLbLBXDhswD1en22z_qAh25RvkVXCmZ_IH&t=2520
