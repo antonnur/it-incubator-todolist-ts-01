@@ -30,14 +30,13 @@ export const TodoList = (props: TodoListPropsType) => {
     props.addTask(title)
     setTitle('')
   }
-
   //выносим button функции в отдельные переменные
   const onAllClickHandler = () => props.changeFilter('all')
   const onActiveClickHandler = () => props.changeFilter('active')
   const onCompletedClickHandler = () => props.changeFilter('completed')
   const onTitleChangeHandler = (e: ChangeEvent<HTMLInputElement>) => setTitle(e.currentTarget.value)
   const onKeyPressHandler = (e: KeyboardEvent<HTMLInputElement>) => {
-    if (e.key === 'Enter') addTask()
+    if (e.key === 'Enter' || e.ctrlKey) addTask()
   }
 
   return (
