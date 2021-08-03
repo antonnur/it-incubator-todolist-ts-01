@@ -22,23 +22,27 @@ const App = () => {
   ])
 
   const removeTask = (taskId: string) => {
-    // const oterArr = tasks.filter(t => t.id !== taskId)
-    // setTasks(oterArr)
+    // const otherArr = tasks.filter(t => t.id !== taskId)
+    // setTasks(otherArr)
     setTasks(tasks.filter(t => t.id !== taskId))
   }
 
   const addTask = (title: string) => {
-    const newTask: TaskType = {
-      id: v1(),
-      title: title,
-      isDone: false
-    }
+    const newTask: TaskType = {id: v1(), title, isDone: false}
     const copyTask = [...tasks]
-    copyTask.push(newTask)
+    copyTask.unshift(newTask)
     setTasks(copyTask)
 
     // setTasks([...tasks, newTask])
     // setTasks([{id: 1(), title: title, isDone:false} ,...tasks])
+  }
+
+  const changeStatus = (taskId: string, isDone: boolean) => {
+    let task = tasks.find(t => t.id === taskId)
+    if (task) {
+      task.isDone = isDone
+    }
+    setTasks([...tasks])
   }
 
   const [filter, setFilter] = useState<FilterValueType>('all')
@@ -74,6 +78,8 @@ const App = () => {
         removeTask={removeTask}
         changeFilter={changeFilter}
         addTask={addTask}
+        changeStatus={changeStatus}
+        filter={filter}
       />
     </div>
   );
