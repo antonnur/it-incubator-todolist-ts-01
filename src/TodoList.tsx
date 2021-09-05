@@ -2,13 +2,15 @@ import React, {ChangeEvent, KeyboardEvent, useState} from "react";
 import {FilterValueType, TaskType} from "./App";
 
 type TodoListPropsType = {
+  id: string
   title: string
-  tasks: Array<TaskType>
-  addTask: (title: string) => void
-  removeTask: (taskId: string) => void
-  changeFilter: (nextFilter: FilterValueType) => void
-  changeStatus: (taskId: string, isDone: boolean) => void
   filter: FilterValueType
+  tasks: Array<TaskType>
+  removeTask: (taskId: string, todoListId: string) => void
+  changeFilter: (nextFilter: FilterValueType, todoListId: string) => void
+  changeTaskStatus: (taskId: string, isDone: boolean, todoListId: string) => void
+  addTask: (title: string, todoListId: string) => void
+  removeTodoList: (todoListId: string) => void
 }
 
 export const TodoList = (props: TodoListPropsType) => {
@@ -18,18 +20,18 @@ export const TodoList = (props: TodoListPropsType) => {
   //функция очищаем input
   const addTask = () => {
     if (title.trim() !== '' && title !== 'censors-text') {
-      props.addTask(title.trim())
+      props.addTask(title.trim(), props.id)
       setTitle('')
     } else {
       setError('Title is required')
     }
   }
 
-  const tasksJsxElements = props.tasks.map(t => {
+  const tasksJsxElements = (t: TaskType) => {
     //*выносим переменную из button
-    const removeTask = () => props.removeTask(t.id)
+    const removeTask = () => props.removeTask(t.id, props.id)
     const onChangeHandler = (e: ChangeEvent<HTMLInputElement>) => {
-      props.changeStatus(t.id, e.currentTarget.checked)
+      props.changeTaskStatus(t.id, e.currentTarget.checked, props.id)
     }
     return (
       <li key={t.id}
@@ -45,12 +47,12 @@ export const TodoList = (props: TodoListPropsType) => {
         {/*<button onClick={() => props.removeTask(t.id)}>x</button>*/}
       </li>
     )
-  })
+  }
 
   //выносим button функции в отдельные переменные
-  const onAllClickHandler = () => props.changeFilter('all')
-  const onActiveClickHandler = () => props.changeFilter('active')
-  const onCompletedClickHandler = () => props.changeFilter('completed')
+  const onAllClickHandler = () => props.changeFilter('all', props.id)
+  const onActiveClickHandler = () => props.changeFilter('active', props.id)
+  const onCompletedClickHandler = () => props.changeFilter('completed', props.id)
   const onTitleChangeHandler = (e: ChangeEvent<HTMLInputElement>) => setTitle(e.currentTarget.value)
   const onKeyPressHandler = (e: KeyboardEvent<HTMLInputElement>) => {
     setError(null)

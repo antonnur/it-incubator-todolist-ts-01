@@ -1,9 +1,9 @@
-import React, {useState} from 'react';
-import './App.css';
-import {TodoList} from "./TodoList";
-import {v1} from 'uuid';
-import {Simulate} from "react-dom/test-utils";
-import keyDown = Simulate.keyDown;
+import React, {useState} from 'react'
+import './App.css'
+import {TodoList} from "./TodoList"
+import {v1} from 'uuid'
+// import {Simulate} from "react-dom/test-utils"
+// import keyDown = Simulate.keyDown
 
 export type FilterValueType = 'all' | 'active' | 'completed'
 
@@ -46,61 +46,73 @@ const App = () => {
   })
 
   const removeTask = (taskId: string, todoListId: string) => {
-    setTasks({
-      ...tasks,
-      [todoListId]: tasks[todoListId].filter(t => t.id !== taskId)
-    })
+    tasks[todoListId] = tasks[todoListId].filter(t => t.id !== taskId)
+    setTasks({...tasks})
   }
 
   const addTask = (title: string, todoListId: string) => {
     const newTask: TaskType = {id: v1(), title, isDone: false}
-    tasks[todoListId] = [...tasks[todoListId], newTask]
+    tasks[todoListId] = [newTask, ...tasks[todoListId]]
     setTasks({...tasks})
   }
 
   const changeTaskStatus = (taskId: string, isDone: boolean, todoListId: string) => {
-    let task = tasks.find(t => t.id === taskId)
-    if (task) {
-      task.isDone = isDone
+    tasks[todoListId] = tasks[todoListId].map(t => t.id === taskId ? {...t, isDone: isDone} : t)
+    setTasks({...tasks})
+  }
+
+  const changeFilter = (filter: FilterValueType, todoListId: string) => {
+    setTodoLists(todoLists.map(tl => tl.id === todoListId ? {...tl, filter: filter} : tl))
+  }
+
+  const removeTodoList = (todoListId: string) => {
+    setTodoLists(todoLists.filter(tl => tl.id !== todoListId))
+    delete tasks[todoListId]
+  }
+
+  const todoListComponents = todoLists.map(tl => {
+    //вариант учебный
+    let tasksForRender = tasks[tl.id]
+    if (tl.filter === 'active') {
+      tasksForRender = tasks[tl.id].filter(t => !t.isDone) //t.isDone === false
     }
-    setTasks([...tasks])
-  }
-
-  const changeFilter = (nextFilter: FilterValueType, todoListId: string) => { setFilter(nextFilter) }
-
-  //вариант учебный
-  let tasksForRender = tasks
-  if (filter === 'active') {
-    tasksForRender = tasks.filter(t => !t.isDone) //t.isDone === false
-  }
-  if (filter === 'completed') {
-    tasksForRender = tasks.filter(t => t.isDone) //t.isDone === true
-  }
-  /*//вариант улучшеный
-  const getTasksForRender = (): Array<TaskType> => {
-    switch (filter) {
-      case "completed":
-        return tasks.filter(t => t.isDone)
-      case "active":
-        return tasks.filter(t => !t.isDone)
-      default:
-        return tasks
+    if (tl.filter === 'completed') {
+      tasksForRender = tasks[tl.id].filter(t => t.isDone) //t.isDone === true
     }
-  }*/
 
-  return (
-    <div className={'App'}>
+    /*//вариант улучшеный
+const getTasksForRender = (): Array<TaskType> => {
+  switch (filter) {
+    case "completed":
+      return tasks[tl.id].filter(t => t.isDone)
+    case "active":
+      return tasks[tl.id].filter(t => !t.isDone)
+    default:
+      return tasks[tl.id]
+  }}*/
+
+    return (
       <TodoList
-        title={'What to learn'}
+        key={tl.id}
+        id={tl.id}
+        filter={tl.filter}
+        title={tl.title}
         tasks={tasksForRender}
+        addTask={addTask}
         removeTask={removeTask}
         changeFilter={changeFilter}
-        addTask={addTask}
-        changeStatus={changeTaskStatus}
-        filter={filter}
+        removeTodoList={removeTodoList}
+        changeTaskStatus={changeTaskStatus}
       />
+    )
+  })
+
+  // GUI (CRUD):
+  return (
+    <div className={'App'}>
+      {todoListComponents}
     </div>
-  );
+  )
 }
 
-export default App;
+export default App
