@@ -2,8 +2,7 @@ import React, {useState} from 'react'
 import './App.css'
 import {TodoList} from "./TodoList"
 import {v1} from 'uuid'
-// import {Simulate} from "react-dom/test-utils"
-// import keyDown = Simulate.keyDown
+import AddItemForm from "./AddItemForm";
 
 export type FilterValueType = 'all' | 'active' | 'completed'
 
@@ -61,8 +60,17 @@ const App = () => {
     setTasks({...tasks})
   }
 
-  const changeFilter = (filter: FilterValueType, todoListId: string) => {
+  const changeTaskTitle = (taskId: string, title: string, todoListId: string) => {
+    tasks[todoListId] = tasks[todoListId].map(t => t.id === taskId ? {...t, title} : t)
+    setTasks({...tasks})
+  }
+
+  const changeTodoListFilter = (filter: FilterValueType, todoListId: string) => {
     setTodoLists(todoLists.map(tl => tl.id === todoListId ? {...tl, filter: filter} : tl))
+  }
+
+  const changeTodoListTitle = (title: string, todoListId: string) => {
+    setTodoLists(todoLists.map(tl => tl.id === todoListId ? {...tl, title} : tl))
   }
 
   const removeTodoList = (todoListId: string) => {
@@ -70,6 +78,17 @@ const App = () => {
     delete tasks[todoListId]
   }
 
+  const addTodoList = (title: string) => {
+    const todoListId = v1()
+    setTodoLists([...todoLists, {
+      id: todoListId,
+      title,
+      filter: "all"
+    }])
+    setTasks({...tasks, [todoListId]: []})
+  }
+
+  //UI
   const todoListComponents = todoLists.map(tl => {
     //вариант учебный
     let tasksForRender = tasks[tl.id]
@@ -100,9 +119,11 @@ const getTasksForRender = (): Array<TaskType> => {
         tasks={tasksForRender}
         addTask={addTask}
         removeTask={removeTask}
-        changeFilter={changeFilter}
         removeTodoList={removeTodoList}
         changeTaskStatus={changeTaskStatus}
+        changeTodoListFilter={changeTodoListFilter}
+        changeTaskTitle={changeTaskTitle}
+        changeTodoListTitle={changeTodoListTitle}
       />
     )
   })
@@ -110,6 +131,7 @@ const getTasksForRender = (): Array<TaskType> => {
   // GUI (CRUD):
   return (
     <div className={'App'}>
+      <AddItemForm addItem={addTodoList}/>
       {todoListComponents}
     </div>
   )
