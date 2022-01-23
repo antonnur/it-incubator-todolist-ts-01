@@ -118,11 +118,11 @@ export function isSquareGreater(areaCr: number, areaSq: number): boolean {
 
 export function getBanknoteList(amountOfMoney: number): Array<number> {
   const banknotes = [1000, 500, 100, 50, 20, 10, 5, 2, 1]
-  let arr:number[] = []
+  let arr: number[] = []
 
-  if (amountOfMoney > 0){
-    for (let i = 0; i < banknotes.length; i++ ){
-      while (amountOfMoney - banknotes[i] >= 0){
+  if (amountOfMoney > 0) {
+    for (let i = 0; i < banknotes.length; i++) {
+      while (amountOfMoney - banknotes[i] >= 0) {
         amountOfMoney = amountOfMoney - banknotes[i]
         arr = [...arr, banknotes[i]]
       }
@@ -130,3 +130,25 @@ export function getBanknoteList(amountOfMoney: number): Array<number> {
   }
   return arr
 }
+
+/*
+export function getBanknoteList2(amountOfMoney: number): Array<number> {
+  const banknotes = [1000, 500, 100, 50, 20, 10, 5, 2, 1]
+
+  return banknotes.reduce((acc, banknote) => {
+
+    const addBanknote = () => {
+
+      if (amountOfMoney - banknote >= 0) {
+        amountOfMoney = amountOfMoney - banknote
+        acc[banknote] += 1
+
+        addBanknote()
+      }
+    }
+
+    addBanknote()
+
+    return acc
+  })
+}*/
