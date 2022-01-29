@@ -20,7 +20,7 @@ export type TodoListType = {
   filter: FilterValueType
 }
 
-type TasksStateType = {
+export type TasksStateType = {
   [key: string]: TaskType[]
 }
 
@@ -138,7 +138,7 @@ const getTasksForRender = (): Array<TaskType> => {
             <Menu/>
           </IconButton>
           <Typography variant={"h6"}>
-            Todolists
+            TodoLists
           </Typography>
           <Button color={"inherit"} variant={"outlined"}>Login</Button>
         </Toolbar>
