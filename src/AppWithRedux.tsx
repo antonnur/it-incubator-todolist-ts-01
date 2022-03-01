@@ -32,7 +32,7 @@ export type TasksStateType = {
   [key: string]: TaskType[]
 }
 
-const AppWithReducer = () => {
+const AppWithRedux = () => {
   // new BLL:
   const todoListId_1 = v1()
   const todoListId_2 = v1()
@@ -161,4 +161,4 @@ const getTasksForRender = (): Array<TaskType> => {
   )
 }
 
-export default AppWithReducer
+export default AppWithRedux
